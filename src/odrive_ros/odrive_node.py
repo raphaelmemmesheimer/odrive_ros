@@ -1,11 +1,11 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 from __future__ import print_function
 
 #import roslib; roslib.load_manifest('BINCADDY')
 import rospy
 #import roslib
-import tf.transformations
-import tf_conversions
+#import tf.transformations
+#import tf_conversions
 import tf2_ros
 
 import std_msgs.msg
@@ -21,7 +21,10 @@ import diagnostic_updater, diagnostic_msgs.msg
 import time
 import math
 import traceback
-import Queue
+try:
+    import queue
+except ImportError:
+    import Queue as queue
 
 from odrive_interface import ODriveInterfaceAPI, ODriveFailure
 from odrive_interface import ChannelBrokenException, ChannelDamagedException
