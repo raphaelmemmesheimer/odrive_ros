@@ -5,7 +5,7 @@ from __future__ import print_function
 import rospy
 #import roslib
 #import tf.transformations
-#import tf_conversions
+import tf_conversions
 import tf2_ros
 
 import std_msgs.msg
@@ -126,7 +126,7 @@ class ODriveNode(object):
         self.status = "disconnected"
         self.status_pub.publish(self.status)
         
-        self.command_queue = Queue.Queue(maxsize=5)
+        self.command_queue = queue.Queue(maxsize=5)
         self.vel_subscribe = rospy.Subscriber("/cmd_vel", Twist, self.cmd_vel_callback, queue_size=2)
         
         self.publish_diagnostics = True
