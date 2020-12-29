@@ -93,7 +93,7 @@ class ODriveNode(object):
         self.wheel_track = float(get_param('~wheel_track', 0.285)) # m, distance between wheel centres
         self.tyre_circumference = float(get_param('~tyre_circumference', 0.341)) # used to translate velocity commands in m/s into motor rpm
         
-        self.connect_on_startup   = get_param('~connect_on_startup', False)
+        self.connect_on_startup   = get_param('~connect_on_startup', True)
         #self.calibrate_on_startup = get_param('~calibrate_on_startup', False)
         #self.engage_on_startup    = get_param('~engage_on_startup', False)
         
@@ -265,7 +265,7 @@ class ODriveNode(object):
             
             if not self.driver:
                 if not self.connect_on_startup:
-                    #rospy.loginfo("ODrive node started, but not connected.")
+                    rospy.loginfo("ODrive node started, but not connected.")
                     continue
                 
                 if not self.connect_driver(None)[0]:
@@ -383,7 +383,7 @@ class ODriveNode(object):
                 self.fast_timer_comms_active = False                
             try:
                 motor_command = self.command_queue.get_nowait()
-            except Queue.Empty:
+            except queue.Empty:
                 rospy.logerr("Queue was empty??" + traceback.format_exc())
                 return
             
@@ -559,7 +559,7 @@ class ODriveNode(object):
         try:
             drive_command = ('drive', (left_linear_val, right_linear_val))
             self.command_queue.put_nowait(drive_command)
-        except Queue.Full:
+        except queue.Full:
             pass
             
         self.last_cmd_vel_time = rospy.Time.now()
@@ -808,8 +808,8 @@ def start_odrive():
     #rospy.spin() 
     
 if __name__ == '__main__':
-    try:
+    #try:
         start_odrive()
-    except rospy.ROSInterruptException:
-        pass
+    #except rospy.ROSInterruptException:
+        #pass
 
