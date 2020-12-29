@@ -274,6 +274,7 @@ class ODriveNode(object):
 
                 if self.calibrate_on_startup:
                     self.driver.calibrate()
+                    self.driver.preroll(wait=True)
 
                 if self.engage_on_startup:
                     if not self.driver.engaged():
