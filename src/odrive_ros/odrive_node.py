@@ -94,8 +94,8 @@ class ODriveNode(object):
         self.tyre_circumference = float(get_param('~tyre_circumference', 0.341)) # used to translate velocity commands in m/s into motor rpm
         
         self.connect_on_startup   = get_param('~connect_on_startup', True)
-        #self.calibrate_on_startup = get_param('~calibrate_on_startup', False)
-        #self.engage_on_startup    = get_param('~engage_on_startup', False)
+        self.calibrate_on_startup = get_param('~calibrate_on_startup', False)
+        self.engage_on_startup    = get_param('~engage_on_startup', False)
         
         self.has_preroll     = get_param('~use_preroll', True)
                 
@@ -271,6 +271,13 @@ class ODriveNode(object):
                 if not self.connect_driver(None)[0]:
                     rospy.logerr("Failed to connect.") # TODO: can we check for timeout here?
                     continue
+
+                if self.calibrate_on_startup:
+                    self.driver.calibrate()
+
+                if self.engage_on_startup:
+                    if not self.driver.engaged():
+                        self.driver.engage()
                     
                 if self.publish_diagnostics:
                     self.diagnostic_updater.setHardwareID(self.driver.get_version_string())
